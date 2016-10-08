@@ -13,6 +13,9 @@ public class Nexus : MonoBehaviour {
     private Text m_nexusText;
 
     [SerializeField]
+    private Text m_scoreText;
+
+    [SerializeField]
     private Text m_playerText;
 
     [SerializeField]
@@ -34,6 +37,9 @@ public class Nexus : MonoBehaviour {
 
     [SerializeField]
     private GameObject mp_choiceStone;
+    
+    [SerializeField]
+    private ZombieSpawner [] m_zombieSpawners;
 
     // Use this for initialization
     void Start ()
@@ -41,7 +47,9 @@ public class Nexus : MonoBehaviour {
         m_wishStones = new List<GameObject>();
         m_nexusText.text = "Bring me my stones and I will grant you what you desire.";
         m_playerText.text = "I guess I should go up to it and press space to drag it.";
-	}
+
+        StartSpawningEnemies();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -59,7 +67,6 @@ public class Nexus : MonoBehaviour {
         if(wishes == 0)
         {
             StartCoroutine(FirstWish());
-            StartCoroutine(StartSpawningEnemies());
         }
         else
         {
@@ -68,6 +75,12 @@ public class Nexus : MonoBehaviour {
 
         StartCoroutine(GenerateNewWishes());
         wishes++;
+        m_scoreText.text = "" + wishes;
+
+        if (wishes == 3)
+        {
+            m_playerText.text = "I should move these corpses. The zombies are using them to navigate."
+        }
     }
 
     private void GiveChoice()
@@ -79,9 +92,12 @@ public class Nexus : MonoBehaviour {
         }
     }
 
-    private IEnumerator StartSpawningEnemies()
+    private void StartSpawningEnemies()
     {
-        yield return new WaitForEndOfFrame();
+        foreach(ZombieSpawner zs in m_zombieSpawners)
+        {
+            zs.StartSpawningZombies();
+        }
     }
 
     private IEnumerator GenerateNewWishes()
@@ -117,9 +133,9 @@ public class Nexus : MonoBehaviour {
             spawnPoints.Add(next);
         }
 
-        foreach(GameObject wishpoint in m_wishPoints)
+        foreach(GameObject sp in spawnPoints)
         {
-            GameObject.Instantiate(mp_choiceStone, wishpoint.transform.position, wishpoint.transform.rotation, null);
+            GameObject.Instantiate(mp_wishStone, sp.transform.position, sp.transform.rotation, null);
         }
     }
 

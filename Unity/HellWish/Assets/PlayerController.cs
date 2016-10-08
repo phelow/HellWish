@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float m_speedModifier = 100.0f;
 
+    [SerializeField]
+    private GameObject m_spriteGameObject;
+
     private int[] wishes;
 
     // Use this for initialization
@@ -44,6 +47,5 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
         m_rigidbody.AddForce(Input.GetAxis("Horizontal") * transform.right * m_speedModifier * Time.deltaTime);
         m_rigidbody.AddForce(Input.GetAxis("Vertical") * transform.up * m_speedModifier * Time.deltaTime);
-
     }
 }

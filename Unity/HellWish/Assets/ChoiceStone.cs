@@ -18,6 +18,9 @@ public class ChoiceStone : MonoBehaviour {
     private Text m_text;
     // Use this for initialization
     void Start () {
+        System.Array values = System.Enum.GetValues(typeof(Wish));
+        m_thisWish = (Wish)values.GetValue(Random.Range(0,values.Length));
+
         m_text.text = m_thisWish.ToString() + "?";
 	}
 	

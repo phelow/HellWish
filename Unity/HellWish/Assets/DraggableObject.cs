@@ -3,7 +3,7 @@ using System.Collections;
 
 public class DraggableObject : MonoBehaviour {
 
-    private const float ms_dragDistance = 3.0f;
+    private const float ms_dragDistance = .5f;
 
 	// Use this for initializati0on
 	void Start () {
