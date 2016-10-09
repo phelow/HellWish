@@ -46,7 +46,7 @@ public class Corpse : DraggableObject {
 
     private IEnumerator DestroyAfterTime()
     {
-        yield return new WaitForSeconds(1000.0f);
+        yield return new WaitForSeconds(200.0f);
         Destroy(this.gameObject);
     }
 

@@ -31,8 +31,64 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private Camera m_camera;
 
+    [SerializeField]
+    private float m_powerTime = 10.0f;
+
+    private float m_glassesMultiplier = 1.5f;
 
     private int[] wishes;
+
+    private bool m_invincible = false;
+
+    public void ActivateHammer()
+    {
+        StartCoroutine(HammerTime());
+    }
+
+    private IEnumerator HammerTime()
+    {
+        m_invincible = true;
+        float t = 4.0f;
+
+        while (t > 0.0f)
+        {
+            t -= Time.deltaTime;
+            yield return new WaitForSeconds(.1f);
+            m_spriteGameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+            yield return new WaitForSeconds(.1f);
+            m_spriteGameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        }
+
+
+        m_invincible = false;
+    }
+
+    private static bool m_invisible = false;
+
+    [SerializeField]
+    private Sprite m_maskedPlayer;
+
+    public static bool GetInvisible()
+    {
+        return m_invisible;
+    }
+
+    public void ActivateMask()
+    {
+        StartCoroutine(MaskRoutine());
+    }
+
+    private IEnumerator MaskRoutine()
+    {
+        m_invisible = true;
+        Sprite tmp = this.GetComponentInChildren<SpriteRenderer>().sprite;
+        this.GetComponentInChildren<SpriteRenderer>().sprite = m_maskedPlayer;
+
+        yield return new WaitForSeconds(m_powerTime);
+        this.GetComponentInChildren<SpriteRenderer>().sprite = tmp;
+
+        m_invisible = false;
+    }
 
     void Awake()
     {
@@ -56,16 +112,24 @@ public class PlayerController : MonoBehaviour {
         wishes[(int)wish] = wishes[(int)wish] + 1;
 
         m_wishSpeedModifier = wishes[(int)ChoiceStone.Wish.Power] + 1.0f;
-        m_camera.orthographicSize = 4 + wishes[(int)ChoiceStone.Wish.Knowledge];
+        m_camera.orthographicSize = 2 + wishes[(int)ChoiceStone.Wish.Knowledge];
 
         m_maxHealth = 100.0f + PlayerController.m_wishSpeedModifier * wishes[(int)ChoiceStone.Wish.Immortality];
         m_curHealth = m_maxHealth;
 
         if(wish == ChoiceStone.Wish.Peace)
         {
+            int i = 0;
+
             foreach(GameObject go in GameObject.FindGameObjectsWithTag("Zombie"))
             {
+                i++;
                 Destroy(go);
+
+                if(i > 7)
+                {
+                    return;
+                }
             }
         }
 
@@ -86,7 +150,10 @@ public class PlayerController : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Zombie")
         {
-            m_curHealth -= Random.Range(10.0f, 90.0f);
+            if (m_invincible == false)
+            {
+                m_curHealth -= Random.Range(10.0f, 90.0f);
+            }
             Destroy(coll.gameObject);
         }
     }
@@ -101,8 +168,20 @@ public class PlayerController : MonoBehaviour {
         return new Vector2(ms_instance.transform.position.x, ms_instance.transform.position.y);
     }
 	
-	// Update is called once per frame
-	void Update () {
+    public void ActivateGlasses()
+    {
+        StartCoroutine(GlassesRoutine());
+    }
+
+    private IEnumerator GlassesRoutine()
+    {
+        m_camera.orthographicSize = m_camera.orthographicSize * m_glassesMultiplier;
+        yield return new WaitForSeconds(m_powerTime);
+        m_camera.orthographicSize = m_camera.orthographicSize /m_glassesMultiplier;
+    }
+
+    // Update is called once per frame
+    void Update () {
         m_rigidbody.AddForce(Input.GetAxis("Horizontal") * transform.right * m_speedModifier * m_wishSpeedModifier * Time.deltaTime);
         m_rigidbody.AddForce(Input.GetAxis("Vertical") * transform.up * m_speedModifier * m_wishSpeedModifier *Time.deltaTime);
 
@@ -122,6 +201,6 @@ public class PlayerController : MonoBehaviour {
         float angle = (Mathf.Atan2(m_rigidbody.velocity.y, m_rigidbody.velocity.x) + 90) * Mathf.Rad2Deg;
         m_spriteGameObject.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-
+        //Wishing mechanic
     }
 }
