@@ -35,7 +35,7 @@ public class ChoiceStone : MonoBehaviour {
         if (coll.gameObject.tag == "Player")
         {
             coll.gameObject.GetComponent<PlayerController>().GrantWish(m_thisWish);
-
+            PlayerController.PlayBlip();
             foreach(GameObject go in GameObject.FindGameObjectsWithTag("ChoiceStones"))
             {
                 Destroy(go);

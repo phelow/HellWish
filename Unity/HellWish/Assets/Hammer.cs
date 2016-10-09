@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Hammer : MonoBehaviour
 {
-
     // Use this for initialization
     void Start()
     {
@@ -26,7 +25,6 @@ public class Hammer : MonoBehaviour
             {
                 Destroy(go);
             }
-
             Destroy(gameObject);
         }
     }

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ZombieAI : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject mp_explosion;
     private float m_timeLeft;
     private GameObject m_player;
     [SerializeField]
@@ -163,8 +165,14 @@ public class ZombieAI : MonoBehaviour
         //Drop a corpse and die
         GameObject.Instantiate(mp_corpse, transform.position, transform.rotation, null);
         GameObject.Instantiate(mp_draggable, transform.position, transform.rotation, null);
+        DestroyZombie();
+    }
 
-        
+    public void DestroyZombie()
+    {
+
+
+        GameObject.Instantiate(mp_explosion, transform.position, transform.rotation, null); ;
 
         Destroy(this.gameObject);
     }

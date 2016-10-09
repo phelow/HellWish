@@ -20,9 +20,6 @@ public class FollowPlayer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         float distance = Vector3.Distance(transform.position, m_target.transform.position);
-
-        Debug.Log(distance);
-
         if (distance < m_minDistance)
         {
             return;

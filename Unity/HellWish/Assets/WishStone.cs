@@ -26,6 +26,7 @@ public class WishStone : DraggableObject {
     {
         if (coll.gameObject.name == "Nexus")
         {
+            PlayerController.PlayBlip();
             coll.gameObject.GetComponent<Nexus>().GrantAWish();
             Destroy(this.gameObject);
         }

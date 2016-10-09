@@ -78,6 +78,7 @@ public class DraggableObject : MonoBehaviour {
 
             if(m_inRange)
             {
+                PlayerController.PlayBlip();
                 SpringJoint2D sj = this.gameObject.AddComponent<SpringJoint2D>();
                 sj.connectedBody = PlayerController.GetPlayerRigidBody();
                 m_spriteRenderer.color = Color.blue;

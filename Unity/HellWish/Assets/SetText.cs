@@ -14,7 +14,7 @@ public class SetText : MonoBehaviour {
 
         if(yourScore > highScore)
         {
-            PlayerPrefs.SetInt("HighScore", highScore);
+            PlayerPrefs.SetInt("HighScore", yourScore);
         }
 
         m_text.text = "You deaded, high score:" + highScore + " your score:" + yourScore + " space to try again";
