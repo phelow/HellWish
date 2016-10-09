@@ -13,22 +13,35 @@ public class Corpse : DraggableObject {
     {
         Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
 
-        ms_dragDistance = this.gameObject.GetComponent<BoxCollider2D>().size.magnitude * 1.5f;
-        
+        float dragDistance = this.gameObject.GetComponent<BoxCollider2D>().size.magnitude * 1.7f;
 
-        m_score = 1/Vector3.Distance(transform.position, PlayerController.GetPlayerPosition());
+        CircleCollider2D cd = this.gameObject.AddComponent<CircleCollider2D>();
 
-        foreach (GameObject wishStone in GameObject.FindGameObjectsWithTag("WishStones"))
-        {
-            m_score += 1 / Vector3.Distance(transform.position, wishStone.transform.position);
-        }
+        cd.radius = dragDistance;
+        cd.isTrigger = true;
 
-        m_score *= 100.0f;
-
-        m_text.text = "" + Mathf.RoundToInt(m_score);
+        StartCoroutine(CalculateScore());
 
         StartCoroutine(DestroyAfterTime());
 
+    }
+
+    private IEnumerator CalculateScore()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(10.0f);
+            m_score = 100 / Vector3.Distance(transform.position, PlayerController.GetPlayerPosition());
+
+            foreach (GameObject wishStone in GameObject.FindGameObjectsWithTag("WishStones"))
+            {
+                m_score += 1 / Vector3.Distance(transform.position, wishStone.transform.position);
+            }
+
+            m_score *= 100.0f;
+
+            m_text.text = "" + Mathf.RoundToInt(m_score);
+        }
     }
 
     private IEnumerator DestroyAfterTime()
@@ -42,8 +55,4 @@ public class Corpse : DraggableObject {
         return m_score;
     }
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

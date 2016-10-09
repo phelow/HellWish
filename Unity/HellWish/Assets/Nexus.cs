@@ -43,7 +43,7 @@ public class Nexus : MonoBehaviour {
     {
         m_wishPoints = GameObject.FindGameObjectsWithTag("GemLocations");
         m_wishStones = new List<GameObject>();
-        m_nexusText.text = "Bring me my stones and I will grant you what you desire.";
+        m_nexusText.text = "Bring me my stones and I will grant you what you desire. Also I gave you telekinesis.";
         m_playerText.text = "I guess I should go up to that red one and press space to drag it.";
     }
 	
@@ -59,8 +59,9 @@ public class Nexus : MonoBehaviour {
             Destroy(go);
         }
 
+        PlayerController.DontSaySpace();
 
-        if(wishes == 0)
+        if (wishes == 0)
         {
             StartCoroutine(FirstWish());
         }

@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D m_rigidbody;
 
     [SerializeField]
+    private Text m_space;
+
+    [SerializeField]
     private float m_speedModifier = 100.0f;
 
     [SerializeField]
@@ -66,6 +69,17 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
+    }
+
+    public static void SaySpace()
+    {
+        ms_instance.m_space.text = "space";
+    }
+
+
+    public static void DontSaySpace()
+    {
+        ms_instance.m_space.text = "";
     }
 
     void OnCollisionEnter2D(Collision2D coll)
