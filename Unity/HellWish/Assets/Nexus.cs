@@ -37,18 +37,14 @@ public class Nexus : MonoBehaviour {
 
     [SerializeField]
     private GameObject mp_choiceStone;
-    
-    [SerializeField]
-    private ZombieSpawner [] m_zombieSpawners;
 
     // Use this for initialization
     void Start ()
     {
+        m_wishPoints = GameObject.FindGameObjectsWithTag("GemLocations");
         m_wishStones = new List<GameObject>();
         m_nexusText.text = "Bring me my stones and I will grant you what you desire.";
-        m_playerText.text = "I guess I should go up to it and press space to drag it.";
-
-        StartSpawningEnemies();
+        m_playerText.text = "I guess I should go up to that red one and press space to drag it.";
     }
 	
 	// Update is called once per frame
@@ -68,10 +64,6 @@ public class Nexus : MonoBehaviour {
         {
             StartCoroutine(FirstWish());
         }
-        else
-        {
-            GiveChoice();
-        }
 
         StartCoroutine(GenerateNewWishes());
         wishes++;
@@ -79,24 +71,22 @@ public class Nexus : MonoBehaviour {
 
         if (wishes == 3)
         {
-            m_playerText.text = "I should move these corpses. The zombies are using them to navigate."
+            m_playerText.text = "I should move these corpses. The zombies are using them to navigate.";
         }
+        else
+        {
+            m_playerText.text = "";
+        }
+
+        PlayerPrefs.SetInt("YourScore", wishes);
     }
 
     private void GiveChoice()
     {
-        m_nexusText.text = "What do you wish for.";
+        m_nexusText.text = "What do you wish for?";
         foreach(GameObject go in m_choiceSpawnSlots)
         {
             GameObject.Instantiate(mp_choiceStone, go.transform.position, go.transform.rotation, null);
-        }
-    }
-
-    private void StartSpawningEnemies()
-    {
-        foreach(ZombieSpawner zs in m_zombieSpawners)
-        {
-            zs.StartSpawningZombies();
         }
     }
 
@@ -118,11 +108,11 @@ public class Nexus : MonoBehaviour {
         yield return new WaitForSeconds(Random.Range(m_minGenWishWaitTime, m_maxGenWishWaitTime));
 
         HashSet<GameObject> spawnPoints = new HashSet<GameObject>();
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i <= this.m_wishPoints.Length/3; i++)
         {
             GameObject next = null;
             while (next == null) {
-                next = this.m_choiceSpawnSlots[Random.Range(0, this.m_choiceSpawnSlots.Length)];
+                next = this.m_wishPoints[Random.Range(0, this.m_wishPoints.Length)];
 
                 if (spawnPoints.Contains(next))
                 {
@@ -137,6 +127,13 @@ public class Nexus : MonoBehaviour {
         {
             GameObject.Instantiate(mp_wishStone, sp.transform.position, sp.transform.rotation, null);
         }
+
+        foreach(GameObject sp in m_choiceSpawnSlots)
+        {
+            GameObject.Instantiate(mp_choiceStone, sp.transform.position, sp.transform.rotation, null);
+
+        }
+
     }
 
     private IEnumerator FirstWish()
@@ -145,7 +142,8 @@ public class Nexus : MonoBehaviour {
         yield return new WaitForSeconds(3.0f);
         m_nexusText.text = "I'll do you one better. I'll bring everyone back.";
         m_playerText.text = "";
-        StartCoroutine(GenerateNewWishes());
+        yield return new WaitForSeconds(3.0f);
+        m_nexusText.text = "What do you wish for?";
 
     }
 }

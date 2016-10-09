@@ -8,7 +8,8 @@ public class ChoiceStone : MonoBehaviour {
     {
         Knowledge,
         Power,
-        Immortality
+        Immortality,
+        Peace
     }
 
     [SerializeField]

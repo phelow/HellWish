@@ -12,14 +12,12 @@ public class ZombieSpawner : MonoBehaviour {
     private float m_zombieLifeTime = 25.0f;
 
 	// Use this for initialization
-	void Start () {
-	    
-	}
-
-    public void StartSpawningZombies()
+	void Start ()
     {
         StartCoroutine(SpawnZombies());
+
     }
+    
 
     private IEnumerator SpawnZombies()
     {
@@ -27,7 +25,10 @@ public class ZombieSpawner : MonoBehaviour {
         {
             yield return new WaitForSeconds(Random.Range(m_minSpawnInterval, m_maxSpawnInterval));
 
-            (GameObject.Instantiate(m_zombie, transform.position, transform.rotation, null) as GameObject).GetComponent<ZombieAI>().InitZombie(m_zombieLifeTime);
+            GameObject go = (GameObject.Instantiate(m_zombie, transform.position, transform.rotation, null) as GameObject);
+            go.GetComponent<ZombieAI>().InitZombie(m_zombieLifeTime);
+
+            go.transform.rotation = new Quaternion(go.transform.rotation.x, go.transform.rotation.y, Random.Range(0.0f, 360.0f),go.transform.rotation.w);
 
             m_zombieLifeTime += 5.0f;
         }

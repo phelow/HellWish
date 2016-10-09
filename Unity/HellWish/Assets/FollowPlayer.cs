@@ -30,6 +30,6 @@ public class FollowPlayer : MonoBehaviour {
 
         Vector3 dir = m_target.transform.position - transform.position;
         
-        m_rigidbody.AddForce(new Vector2(dir.x, dir.y).normalized * Time.deltaTime * m_cameraForce * distance);
+        m_rigidbody.AddForce(new Vector2(dir.x, dir.y).normalized * Time.deltaTime * m_cameraForce * Mathf.Pow(distance,1.2f));
 	}
 }

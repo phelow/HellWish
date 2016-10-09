@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/MainScene.unity
+- path: Assets/Failure.unity
   isLoaded: 1
   isActive: 1
